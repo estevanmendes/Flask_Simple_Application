@@ -4,7 +4,7 @@ import os
 class Files:
 
     @staticmethod
-    def create_file(path):
+    def create_file(path:str) -> str:
         data=str(datetime.datetime.now())
         with open(path,'w') as f:
             f.write(data)
@@ -12,12 +12,12 @@ class Files:
         return data
     
     @staticmethod
-    def erase_file(path):
+    def erase_file(path:str) -> None:
         os.remove(path)
      
 
 
-    def __init__(self,root_path,extension='.txt') -> None:
+    def __init__(self,root_path:str,extension:str='.txt') -> None:
         """
         root_path: Path in which all files will be created
         """
@@ -26,16 +26,16 @@ class Files:
         self.names=[]
         self.paths={}
 
-    def check_filename_in(self,filename):
+    def check_filename_in(self,filename:str) -> bool:
         if filename in self.names:
             return True
         else:
             return False
 
-    def get_path(self,filename):
+    def get_path(self,filename:str) -> str:
         return os.path.join(self.root_path,filename+self.extension)  
 
-    def add_file(self,filename):
+    def add_file(self,filename:str) -> str:
         if self.check_filename_in(filename):
             return'The filename already exist, please delete it before creating a new'
           
@@ -45,7 +45,7 @@ class Files:
         return Files.create_file(path)
 
 
-    def remove_file(self,filename):
+    def remove_file(self,filename:str) -> str:
         if not self.check_filename_in(filename):
             return 'The filename does not exist, please create it before.'
         
@@ -54,7 +54,7 @@ class Files:
         del self.paths[filename]
         return '{filename} deleted'
     
-    def load_file(self,filename):
+    def load_file(self,filename) -> str:
         if not self.check_filename_in(filename):
             return 'The filename does not exist, please create it before.'
         
@@ -62,7 +62,7 @@ class Files:
             data=f.read()
         return data
 
-    def edit(self,filename,):
+    def edit(self,filename:str) -> str:
         if not self.check_filename_in(filename):
             return 'The filename does not exist, please create it before.'
         Files.erase_file(self.paths[filename])

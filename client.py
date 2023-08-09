@@ -5,14 +5,14 @@ import time
 
 class TestServerMethods(unittest.TestCase):
 
-    def test_default(self):
+    def test_default(self) -> None:
         print(url)
         response=requests.get(url)
         self.assertEqual(response.status_code,200,"Error in the deafult endpoint, status code inst 200")
         self.assertGreater(len(response.text),1,'No message is being displayed')
         time.sleep(1)
 
-    def test_file_creation(self):
+    def test_file_creation(self) -> None:
         for file in ['d1','d2','d3']:
             response=requests.post(url+f'file_handler/{file}')
             self.assertEqual(response.status_code,200,"Error in the deafult endpoint, status code inst 200") 
@@ -20,7 +20,7 @@ class TestServerMethods(unittest.TestCase):
             print(response.text)
             time.sleep(.2)
 
-    def test_file_update(self):
+    def test_file_update(self) -> None:
         for file in ['d1','d2','d3']:
             response=requests.put(url+f'file_handler/{file}')
             self.assertEqual(response.status_code,200,"Error in the deafult endpoint, status code inst 200") 
@@ -28,7 +28,7 @@ class TestServerMethods(unittest.TestCase):
             time.sleep(.2)
 
 
-    def test_file_get(self):
+    def test_file_get(self) -> None:
         for file in ['d1','d2','d3']:
             response=requests.get(url+f'file_handler/{file}')
             self.assertEqual(response.status_code,200,"Error in the deafult endpoint, status code inst 200")
@@ -36,7 +36,7 @@ class TestServerMethods(unittest.TestCase):
             print(response.text) 
             time.sleep(0.2)
     
-    def test_file_remotion(self):
+    def test_file_remotion(self) -> None:
         for file in ['d1','d2','d3']:
             response=requests.delete(url+f'file_handler/{file}')
             self.assertEqual(response.status_code,200,"Error in the deafult endpoint, status code inst 200")
