@@ -1,1 +1,2 @@
 sample_folder/*.txt
+__pycache__/*
