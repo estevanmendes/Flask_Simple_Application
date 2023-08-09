@@ -11,8 +11,6 @@ class TestServerMethods(unittest.TestCase):
     def check_message_display(self,response) -> None:
         self.assertGreater(len(response.text),1,'No message is being displayed')
 
-
-
     def test_default(self) -> None:
         print(url)
         response=requests.get(url)
@@ -25,7 +23,6 @@ class TestServerMethods(unittest.TestCase):
             response=requests.post(url+f'file_handler/{file}')
             self.check_status_code(response)
             self.check_message_display(response)
-            print(response.text)
             time.sleep(.2)
 
     def test_file_update(self) -> None:

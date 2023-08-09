@@ -81,8 +81,6 @@ class Files:
         Files.erase_file(self.paths[filename])
         return Files.create_file(self.paths[filename])
 
- 
-
     def get_path(self,filename:str) -> str:
         return os.path.join(self.root_path,filename+self.extension)  
 
