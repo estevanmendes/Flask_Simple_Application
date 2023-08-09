@@ -17,7 +17,7 @@ cd Flask_Simple_Application
 ```
 
 Secondly, let's run our app using Flask. 
-It is set to be run in the http://localhost:5000/
+It is set to be ran in the http://localhost:5000/
 
 ```
 flask --app server run --debug
