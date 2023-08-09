@@ -15,6 +15,7 @@ class Files:
     def erase_file(path:str) -> None:
         os.remove(path)
 
+    @staticmethod
     def check_filename_in(list_of_files:list,filename:str) -> bool:
         if filename in list_of_files:
             return True
