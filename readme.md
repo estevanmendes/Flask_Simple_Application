@@ -37,7 +37,7 @@ Or run everything at once. However, recall that one must run the client code in 
 
 ```
 
-git clone https://github.com/estevanmendes/Flask_Simple_Application.
+git clone https://github.com/estevanmendes/Flask_Simple_Application.git
 
 cd Flask_Simple_Application
 
