@@ -4,6 +4,8 @@ import datetime
 from Files import Files
 
 ExampleFiles=Files(root_path='sample_folder',extension='.txt')
+if not os.path.exists('sample_folder'):
+    os.mkdir('sample_folder')
 print(ExampleFiles)
 
 app = Flask(__name__)
