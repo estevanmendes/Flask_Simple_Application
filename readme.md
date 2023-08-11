@@ -51,7 +51,7 @@ python client.py
 
 ```
 
-### Client
+## Client
 
 The client representation was built using [unittest library](https://docs.python.org/3/library/unittest.html). 
 Please pay attention to the need of changing the URL of the api
@@ -59,7 +59,7 @@ Please pay attention to the need of changing the URL of the api
 It contains many tests for all the methods of the API. 
 
 
-### Server
+## Server
 
 The server uses a package called [Files](Files.py) from another Python file. 
 
