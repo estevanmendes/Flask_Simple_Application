@@ -91,7 +91,7 @@ Perhaps, one may need to change it, due the FLASK app being ran in another port.
 
         POST
 
-        It created the file with the fileId path parameter. 
+        It creates the file with the fileId path parameter. 
         A file is created holding the datetime string in which was created. The same datetime string is returned in body response.
 
         If the fileId already exists the response's body contains the following message: The filename already exist, please delete it before creating a new.
