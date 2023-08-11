@@ -65,3 +65,57 @@ The server uses a package called [Files](Files.py) from another Python file.
 
 It builds up the web app using the package file that will manage the creation, remotion, edition, and loading of the files in the server. 
 
+
+## Api GuideLines
+
+Base deafult url: http://localhost:5000
+
+Perhaps, one may need to change it, due the FLASK app being ran in another port.
+
+
+### Endpoits
+
+    /
+
+    methods:
+
+        GET
+
+        It works as a guideline for the user indicating the filehandler endpoint. 
+
+        The stadard message returned in response's body is "Welcome to the server, in order of sending a command related to file management use the endpoint /file_handler"
+
+    /file_handler/{fileId}
+
+    methods:
+
+        POST
+
+        It created the file with the fileId path parameter. 
+        A file is created holding the datetime string in which was created. The same datetime string is returned in body response.
+
+        If the fileId already exists the response's body contains the following message: The filename already exist, please delete it before creating a new.
+
+        GET
+
+        It returns the data inside the fileId stored in the server. 
+
+        If the fileId does not exists in the server it is returned the following message:The filename does not exist, please create it before.
+
+        PUT
+
+        It edits the file changing the datetime string that is stored inside it. The new datetieme string is returned in the response's body.
+
+        If the fileId does not exists in the server it is returned the following message:The filename does not exist, please create it before.
+
+        DELETE
+
+        It deletes the fileId from the server. it returns a message indicating the fileId that was erased.  the message returned follows the pattern:{fileId} deleted
+
+        If the fileId does not exists in the server it is returned the following message:The filename does not exist, please create it before.
+
+### Examples
+
+Examples might be found in the postman link: https://documenter.getpostman.com/view/19669380/2s9Xy3trti
+
+
