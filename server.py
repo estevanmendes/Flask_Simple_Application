@@ -13,7 +13,7 @@ app = Flask(__name__)
 @app.get('/')
 def default():
     print('something')
-    return "Welcome to the server to send command related to file management use the endpoint  /file_handle/<filename>"
+    return "Welcome to the server to send command related to file management use the endpoint  /file_handler/<filename>"
 
 @app.route('/file_handler/<string:filename>',methods=['GET','POST','PUT','DELETE'])
 def file_handler(filename):
