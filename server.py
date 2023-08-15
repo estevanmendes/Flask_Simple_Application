@@ -4,19 +4,24 @@ import datetime
 from Files import Files
 import random
 import pandas as pd
+from dataset import Dataset
 
 
 ExampleFiles=Files(root_path='sample_folder',extension='.txt')
 if not os.path.exists('sample_folder'):
     os.mkdir('sample_folder')
-print(ExampleFiles)
 
 app = Flask(__name__)
+
+
+datasets={'id':Dataset}
 
 @app.get('/')
 def default():
     print('something')
     return "Welcome to the server to send command related to file management use the endpoint  /file_handler/<filename>"
+
+
 
 @app.route('/file_handler/simple_example/<string:filename>',methods=['GET','POST','PUT','DELETE'])
 def simple_example(filename):
@@ -39,13 +44,7 @@ def simple_example(filename):
 def error():
     pass
     
-def create_dataset(dataset_info):
-
-    default_path='datasets'
-    if not os.path.exists('datasets'):
-        os.mkdir('datasets')
-    deafult_extension='csv'
-    default_max_rows=1000
+def dataset_request_manager(dataset_info)-> dict:
 
     if dataset_info.get('schema'):
         schema=dataset_info.get('schema')
@@ -56,30 +55,18 @@ def create_dataset(dataset_info):
         
         if schema.get('max_rows'):
             max_rows=schema.get('max_rows')
-        else:
-            max_rows=default_max_rows
 
     if dataset_info.get('extension'):
         extension=dataset_info.get('extension')
-    else:
-        extension=deafult_extension
 
     if dataset_info.get('datasetName'):
-        datasetName=dataset_info.get('datasetName')
+        dataset_name=dataset_info.get('datasetName')
     else:
         dataset_name='Unkown_'+str(random.randint(1,1000))+str(random.randint(1,1000))
     
-    os.path.join(default_path,datasetName)
-    dtypes={}
+    dtypes={item['name']:item['type'] for item in columns}
     
-    _create_pandas_dataframe(columns,dtypes,max_rows)
-
-def    _create_pandas_dataframe(path,columns,dtypes,max_rows):
-    pd.DataFrame(columns=columns,dtypes=dtypes).to_csv()
-
-
-
-
+    return {'name':dataset_name,'columns':[column['name'] for column in columns],'dtypes':dtypes,'max_rows':max_rows,'extension':extension}
 
 
     
@@ -95,12 +82,16 @@ def dataset(datasetId):
   
 
     if request.method=="GET":
-        return {'dataset':'yes'}
+        
+        return {'dataset_info':str(datasets[datasetId]),'dataset':datasets[datasetId].df}
     
     
     elif request.method=="POST":
-        create_dataset(body)        
-        return {'created':'yes'}
+        ##handling bad requests
+        kwargs=dataset_request_manager(body)        
+        datasets[datasetId]=Dataset(**kwargs)
+
+        return {'created':'yes','dataset_info':str(datasets[datasetId])}
 
 
 
@@ -110,10 +101,10 @@ def dataset_edit(extension):
 
     if request.method=="GET":
         pass
-    elif request.method=="POST":
-        create_dataset()
 
+    elif request.method=="POST":
         pass
+
     elif request.method=="PUT":
         pass
 
