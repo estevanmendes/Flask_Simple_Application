@@ -1,4 +1,4 @@
-from flask import Flask,request
+from flask import Flask,request,Response,send_file
 import os
 import datetime
 from Files import Files
@@ -75,18 +75,17 @@ def dataset_request_manager(dataset_info)-> dict:
 
 
 @app.route('/file_handler/dataset/<string:datasetId>/config',methods=['GET','POST'])
-def dataset(datasetId):
-    if request.is_json:
-        body=request.json
-        print(body)
+def dataset_config(datasetId):
+
   
 
-    if request.method=="GET":
-        
-        return {'dataset_info':str(datasets[datasetId]),'dataset':datasets[datasetId].df}
-    
+    if request.method=="GET":        
+        return {'dataset_info':str(datasets[datasetId])}
     
     elif request.method=="POST":
+        if request.is_json:
+            body=request.json
+
         ##handling bad requests
         kwargs=dataset_request_manager(body)        
         datasets[datasetId]=Dataset(**kwargs)
@@ -96,20 +95,39 @@ def dataset(datasetId):
 
 
 
-@app.route('/file_handler/dataset/<string:extension>')
-def dataset_edit(extension):
+@app.route('/file_handler/dataset/<string:datasetId>',methods=["GET","POST","PUT","DELETE"])
+def dataset(datasetId):
+    print(request.query_string.decode('utf-8'))
+    if request.args.get('start_row'):
+        start_row=int(request.args['start_row'])
+    else:
+        start_row=None
+    if request.args.get('end_row'):
+        end_row=int(request.args['end_row'])
+    else: 
+        end_row=None
+
 
     if request.method=="GET":
-        pass
+        csv=datasets[datasetId].get_df(start_row,end_row)
+        return Response(csv,mimetype="text/csv",
+                headers={"Content-disposition":
+                f"attachment; filename={datasetId}.csv"})
 
     elif request.method=="POST":
-        pass
+        if request.is_json:
+            body=request.json              
+        data=body['data']
+        added_rows=datasets[datasetId].add_rows(data,start_row=start_row)    
+
+        return {"rowsAdded":True,"NumberOfRows":added_rows,}
 
     elif request.method=="PUT":
         pass
 
     elif request.method=="DELETE":
-        pass
+
+        added_rows=datasets[datasetId].delte_rows(data,start_row=start_row)    
 
 
 if __name__== '__main__':

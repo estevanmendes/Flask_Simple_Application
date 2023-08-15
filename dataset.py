@@ -1,6 +1,6 @@
 import pandas as pd
 import os
-
+from typing import Union
 class Dataset:
     
     default_path='datasets'
@@ -23,7 +23,7 @@ class Dataset:
         return os.path.join(root_path,dataset_name)
     
     @staticmethod
-    def save_dataframe(df:pd.DataFrame,path:str,extension:str):
+    def save_dataframe(df:pd.DataFrame,path:str,extension:str)-> None:
         if extension=="csv":
             df.to_csv(path,index=False,sep=',')
 
@@ -47,17 +47,50 @@ class Dataset:
         print(self.schema)
         df=pd.DataFrame(columns=self.columns)
         df=df.astype(self.schema)
-        self.df=df
+        self._df=df
         self.save()
         return df
 
         
-    def save(self):
-        Dataset.save_dataframe(self.df,self.path,self.extension)
+    def save(self)->None:
+        Dataset.save_dataframe(self._df,self.path,self.extension)
     
     def __str__(self) -> str:
         return f"datasetName:{self.name},max_rows:{self.max_rows},extension:{self.extension},columns:{self.columns}"
     
+    @property
+    def df(self)->str:
+        return self._df.to_string()
+
+    def get_df(self,start_row:Union[int,None]=None,end_row:Union[int,None]=None)->str:
+        if not start_row:
+            start_row=0
+        if not end_row:
+            end_row=-1
+
+        return self._df.iloc[start_row:end_row].to_string()
+
+    def add_rows(self,data:dict,start_row:Union[int,None]=None)->int:
+        df_increment=pd.DataFrame(data)
+        if start_row:
+            df=pd.concat([self._df.iloc[:start_row],df_increment],axis=0)
+            self._df=pd.concat([df,self._df.iloc[start_row:]],axis=0)
+            del df
+        else:
+            self._df=pd.concat([self._df,df_increment],axis=0)
+        self.save()
+        incremented_rows=len(df_increment)
+        del df_increment
+        return incremented_rows
+
+    def delete_rows(self):
+        pass
+
+        
 
 if __name__=='__main__':
-    Dataset('test',10,['t1'],{'t1':'int'},'csv')
+    d1=Dataset('test',10,['t1'],{'t1':'int'},'csv')
+    d1._df=pd.DataFrame({'t1':[1,2,3],'t2':['ab','bc','cd']})
+    
+    print(d1.get_df(None,None))
+    print(type(d1._df))
